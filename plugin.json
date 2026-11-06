@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "suspect-fraud",
+  "version": "0.1.0",
+  "description": "Capture suspected fraud evidence and report through verified official channels.",
+  "author": {
+    "name": "Daniel Kam"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "SuspectFraud",
+        "shortDescription": "Capture and report scam clues",
+        "longDescription": "Preserves private evidence, verifies registrar and provider abuse contacts, prepares or submits authorised reports, contacts impersonated companies, and routes Singapore cases to ScamShield. Uses available host tools; submissions require user authority and access.",
+        "developerName": "Daniel Kam",
+        "category": "Security",
+        "capabilities": [],
+        "defaultPrompt": "Capture this suspected scam evidence and help report it through verified official channels."
+      }
+    }
+  }
+}
