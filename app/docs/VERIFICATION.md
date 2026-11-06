@@ -26,4 +26,4 @@ Screenshot saving was denied by browser tooling; inline inspection is recorded, 
 
 ## Release boundary
 
-Independent review reproduced a REST/MCP capacity mismatch and independently confirmed the central transactional correction. REVIEW.md records hashes and scope. Remote DNS/TLS/deployment, multiuser/OAuth, public directory acceptance and validated scam-detection accuracy remain unestablished.
+Independent review reproduced a REST/MCP capacity mismatch and independently confirmed the central transactional correction. REVIEW.md records hashes and scope. Hosted DNS/TLS, private runtime and public-origin synthetic acceptance are now recorded in [HOSTED-PILOT.md](HOSTED-PILOT.md). Multiuser/OAuth, public directory acceptance and validated scam-detection accuracy remain unestablished.

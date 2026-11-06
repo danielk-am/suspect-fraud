@@ -14,4 +14,4 @@ Website: https://danielk.am/tools/suspect-fraud/
 
 ## Alkamy OSINT app pilot
 
-The [app/](app/) directory contains SuspectFraud 0.1.0: private case management, passive domain checks, screenshot OCR, reporting drafts and authenticated MCP tools. It includes constrained Docker services, consent-based offline training and verification records. See [setup and limitations](app/README.md). Hosting and public directory submission remain pending; no public evidence-upload service is enabled.
+The [app/](app/) directory contains SuspectFraud 0.1.0: private case management, passive domain checks, screenshot OCR, reporting drafts and authenticated MCP tools. It includes constrained Docker services, consent-based offline training and verification records. See [setup and limitations](app/README.md). The [hosted owner pilot](https://osint.alkamy.ltd/tools/suspect-fraud/) passed synthetic public-origin, OCR-isolation and recovery checks on 6 November 2026. Private case access requires the owner credential. Public directory submission remains blocked; no open evidence-upload service is enabled.

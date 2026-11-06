@@ -12,7 +12,7 @@ A private workspace for checking an unexpected offer, keeping evidence and prepa
 - Case export/deletion and separately approved redacted training copies, with export and withdrawal.
 - 19 bearer-authenticated MCP tools at `/mcp`.
 
-The interface serves `/tools/suspect-fraud/` and `/tools/suspect-fraud/recruitment-scams/`. Proposed hosted origin: `https://osint.alkamy.ltd`. This source release does not establish a live deployment or public ChatGPT listing. The shared AI Assistant is disconnected; the manual workflow works independently.
+The interface serves `/tools/suspect-fraud/` and `/tools/suspect-fraud/recruitment-scams/`. Hosted owner pilot: [osint.alkamy.ltd](https://osint.alkamy.ltd/tools/suspect-fraud/), verified on 6 November 2026. Private API/MCP calls require the owner credential. This is not a public ChatGPT directory listing or a multiuser service. The shared AI Assistant is disconnected; the manual workflow works independently.
 
 ## Run locally
 
@@ -49,7 +49,8 @@ This build does not send reports, contact recruiters, browse suspect links, reco
 ## Evidence and provenance
 
 - [Verification](docs/VERIFICATION.md): build, browser/container checks and limits.
-- [Independent review](docs/REVIEW.md): reproduced finding, correction and source hashes.
+- [Independent source review](docs/REVIEW.md): reproduced finding, correction and source hashes.
+- [Hosted pilot acceptance](docs/HOSTED-PILOT.md): public TLS/auth, OCR isolation, backup/restore and restart evidence.
 - [API/MCP](docs/API.md): authentication, tools, schemas and upstream boundaries.
 - [OCR/training](docs/LEARNING.md): consent, containment and evaluation.
 - [Build brief](docs/BUILD.md): acceptance and branding.
