@@ -1,12 +1,14 @@
 # Hosted owner pilot acceptance
 
-Verified 6 November 2026. App version 0.1.0, reviewed runtime source commit `5ef7bb782892875aed1c01b79cf0d99042bef2d8`. Later documentation changes do not imply a new runtime build. All hosted acceptance records were synthetic and were deleted after verification. No incident report was submitted by the app.
+Initial baseline verified 6 November 2026. App version 0.1.0, baseline runtime source commit `5ef7bb782892875aed1c01b79cf0d99042bef2d8`. Later documentation changes do not imply a new runtime build. All hosted acceptance records were synthetic and were deleted after verification. No incident report was submitted by the app.
 
 - Workspace: https://osint.alkamy.ltd/tools/suspect-fraud/
 - Recruitment route: https://osint.alkamy.ltd/tools/suspect-fraud/recruitment-scams/
 - MCP: https://osint.alkamy.ltd/mcp
 
-## Observed acceptance
+Current runtime is the BYOK/navigation repair `b1fb02a932f1a2579c961f974bff4a0bd22c5864` described below. The original acceptance table records the initial baseline.
+
+## Observed initial acceptance
 
 | Check | Result |
 |---|---|
@@ -38,6 +40,14 @@ This is one private owner installation, not an open public upload service or a m
 
 The backup exercise proves a same-host, synthetic-only restore. No recurring backup job, encrypted off-host backup or disaster-recovery service was installed. Before retaining valuable evidence, the operator must decide private backup retention, encryption and off-host recovery. Deletion cannot recall exports or backups. SQLite is not application-encrypted, and original screenshots must be preserved separately by the case owner.
 
-The shared assistant remains disconnected. Warning observations use bounded heuristics; neural training remains offline and NEEDS_EVIDENCE. Container isolation reduces exposure but shares the host kernel. Public ChatGPT listing remains blocked by the previously observed skills-only submission restriction; hosted deployment does not establish submission or approval.
+The initial baseline assistant was disconnected; the current OpenRouter BYOK implementation is described below. Warning observations use bounded heuristics; neural training remains offline and NEEDS_EVIDENCE. Container isolation reduces exposure but shares the host kernel. Public ChatGPT listing remains blocked by the previously observed skills-only submission restriction; hosted deployment does not establish submission or approval.
 
 Initial rollback is to stop only this new managed service and remove only its public route, preserving its external case volume, credential, reviewed source and images. Restart recovery was exercised; service removal and a failed-upgrade rollback were not exercised. The original source prerelease archive/checksum remains unchanged.
+
+## BYOK/navigation repair rollout
+
+Runtime source `b1fb02a932f1a2579c961f974bff4a0bd22c5864` is deployed through the existing management API. The app image is `alkamy/suspect-fraud-app:0.1.0-b1fb02a`, identity `sha256:7cbb1fb056ccc2c1491bdb1862cda58a2ab1e52e4eeb8c54525e14cf2219a7f5`; the OCR image is unchanged. Private routes resolve unlock and case prerequisites. OpenRouter BYOK chat uses explicit cloud consent, a session-memory key, a fixed free router and no automatic case attachment. See [assistant privacy and limits](ASSISTANT.md).
+
+27 Node tests and the production build passed; independent bounded review cleared two reproduced timing races. Synthetic browser checks covered chat success, failure/cancellation, disconnection, new conversation, reload, session loss and lock. The affected layout was checked at 320/390/820/1440 pixel emulated widths. Public HTTPS login, assistant connection-state endpoint, invalid connection/disconnected-chat denial, disconnect and logout passed against the deployed service without an upstream model call. Database counts and content digests matched before and after rollout.
+
+Actual OpenRouter generation remains unverified until the owner supplies a real key. Free-model availability and provider privacy-routing compatibility were not established by synthetic tests. The old app image and source remain available for an API-managed rollback; no case schema or volume migration was made.

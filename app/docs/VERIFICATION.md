@@ -22,7 +22,7 @@ At 390px, navigation and assistant drawers made main content inert and focused i
 
 Actual DOM workflow: login, case creation, evidence/warnings, report draft, receipt, training approval/withdrawal. Draft count 0 became 1 only after receipt. HTML-looking case title rendered literally, without inserted image. Reload restored case list through authenticated API. No case/token in browser storage.
 
-Screenshot saving was denied by browser tooling; inline inspection is recorded, no saved screenshots claimed. No physical-device, screen-reader or full accessibility audit. Assistant provider disconnected, with no provider acceptance result or background Dot hook.
+Screenshot saving was denied by browser tooling; inline inspection is recorded, no saved screenshots claimed. No physical-device, screen-reader or full accessibility audit. At initial acceptance the assistant provider was disconnected, with no provider acceptance result or background Dot hook. See the later BYOK repair below.
 
 ## Release boundary
 
