@@ -1,0 +1,45 @@
+---
+import '../styles/frame.css';
+interface Props { name: string; description?: string; storageKey: string; layout?: 'framed' | 'tall'; }
+const {name, description = '', storageKey, layout = 'framed'} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>{name}</title>
+  <link rel="icon" type="image/png" href="/suspect-fraud.png" />
+
+</head>
+<body>
+  <a class="af-skip" href="#af-main">Skip to workspace</a>
+  <div class="af-frame" data-app-frame data-storage-key={storageKey} data-layout={layout}>
+    <aside class="af-panel af-left" id="af-navigation" aria-label="Navigation">
+      <header class="af-panel-header">
+        <slot name="identity"><span class="af-brand"><span class="af-mark" aria-hidden="true">A</span>{name}</span></slot>
+        <button class="af-icon af-drawer-toggle" data-af-toggle="left" aria-controls="af-navigation" aria-expanded="true" aria-label="Toggle navigation" title="Toggle navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
+      </header>
+      <div class="af-scroll"><slot name="navigation" /></div>
+      <footer class="af-panel-footer"><slot name="actions" /></footer>
+    </aside>
+    <div class="af-resizer" data-af-resize="left" role="separator" aria-label="Resize navigation" aria-orientation="vertical" aria-controls="af-navigation" aria-valuemin="220" aria-valuemax="340" aria-valuenow="256" tabindex="0"></div>
+    <main class="af-panel af-main" id="af-main" tabindex="-1">
+      <header class="af-toolbar">
+        <button class="af-icon" data-af-toggle="left" aria-controls="af-navigation" aria-expanded="true" aria-label="Toggle navigation" title="Toggle navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
+        <div class="af-toolbar-content"><slot name="toolbar" /></div>
+        <button class="af-icon" data-af-theme aria-label="Switch to dark appearance" title="Switch appearance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z"/></svg></button>
+        <button class="af-icon" data-af-toggle="right" aria-controls="af-assistant" aria-expanded="true" aria-label="Toggle assistant" title="Toggle assistant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 3V6a2 2 0 0 1 2-2Z"/></svg></button>
+      </header>
+      <div class="af-canvas af-scroll"><slot /></div>
+      <footer class="af-workspace-footer"><slot name="status"><span>Ready.</span><span>Astro + Tailwind</span></slot></footer>
+    </main>
+    <div class="af-resizer" data-af-resize="right" role="separator" aria-label="Resize assistant" aria-orientation="vertical" aria-controls="af-assistant" aria-valuemin="280" aria-valuemax="420" aria-valuenow="320" tabindex="0"></div>
+    <aside class="af-panel af-right" id="af-assistant" aria-label="Assistant"><slot name="assistant" /></aside>
+    <button class="af-backdrop" data-af-backdrop hidden aria-label="Close open panel" tabindex="-1"></button>
+  </div>
+  <script>import '../scripts/select'; import '../scripts/frame';</script>
+</body>
+</html>

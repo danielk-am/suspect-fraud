@@ -1,0 +1,51 @@
+:root {
+  color-scheme: light;
+  --af-accent: #205ac9;
+  --af-accent-soft: #eaf1ff;
+  --af-primary: linear-gradient(180deg, #2e70ee 0%, #245ed6 45%, #1746b4 100%);
+  --af-primary-hover: linear-gradient(180deg, #2864d7 0%, #1c50bf 45%, #103a9b 100%);
+  --af-text: #182b45;
+  --af-muted: #586b80;
+  --af-surface: #ffffff;
+  --af-sidebar: #f0f3f8;
+  --af-base: #f0f3f8;
+  --af-workspace: #f8faff;
+  --af-field: var(--af-surface);
+  --af-field-muted: #f7f7f7;
+  --af-border: #dedee5;
+  --af-control-border: #85858f;
+  --af-focus: #205ac9;
+  --af-danger: #b42318;
+  --af-radius: 10px;
+  --af-control-height: 38px;
+  --af-control-padding: 9px 12px;
+  --af-header-height: 56px;
+  --af-left: 256px;
+  --af-right: 320px;
+  --af-gap: clamp(12px, 1.4vw, 20px);
+  --af-content-space: clamp(20px, 3vw, 48px);
+  --af-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --af-text: #ececf1;
+  --af-muted: #aaaab7;
+  --af-surface: #202126;
+  --af-sidebar: #1b1c21;
+  --af-base: #1b1c21;
+  --af-workspace: #16171b;
+  --af-field: var(--af-surface);
+  --af-field-muted: #26272e;
+  --af-border: #383941;
+  --af-control-border: #7f808b;
+  --af-accent: #9fc4ff;
+  --af-accent-soft: #20334f;
+  --af-focus: #9fc4ff;
+  --af-danger: #ffaaa2;
+}
+@theme inline {
+  --color-app-surface: var(--af-surface);
+  --color-app-text: var(--af-text);
+  --color-app-muted: var(--af-muted);
+  --color-app-accent: var(--af-accent);
+}

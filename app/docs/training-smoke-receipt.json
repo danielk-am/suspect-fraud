@@ -1,0 +1,23 @@
+{
+  "runtime": "Docker colima-arden",
+  "uid": "10001:10001",
+  "network": "none",
+  "readOnlyRoot": true,
+  "capabilities": "none",
+  "data": "synthetic fixtures only",
+  "result": [
+    {
+      "status": "trained_experiment",
+      "evaluationStatus": "NEEDS_EVIDENCE",
+      "trainingCount": 18,
+      "validationCount": 6,
+      "modelPromoted": false
+    },
+    {
+      "datasetSha256": "7173dd2e603ae26d1873c575cc0b4ea6ef8574435bce6e36203cd0961eea4c0e",
+      "torchVersion": "2.8.0+cpu",
+      "evaluationStatus": "NEEDS_EVIDENCE",
+      "validationCount": 6
+    }
+  ]
+}

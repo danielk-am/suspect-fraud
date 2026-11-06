@@ -1,0 +1,64 @@
+---
+interface Props {
+  intro?: string;
+  placeholder?: string;
+  context?: string;
+  suggestions?: {label: string; prompt: string; disabled?: boolean}[];
+}
+const {
+  intro = 'Ask in your own words. Connect an assistant to help with the work on this screen.',
+  placeholder = 'Ask about your work…',
+  context = 'No item selected',
+  suggestions = [
+    {label:'Start something new', prompt:'Help me define the task, audience and next action.'},
+    {label:'Plan the next steps', prompt:'Help me plan the steps to finish this task.'},
+    {label:'Refine this item', prompt:'Help me improve the selected item.', disabled:true},
+    {label:'Explain this item', prompt:'Explain the selected item without changing it.', disabled:true},
+  ],
+} = Astro.props;
+---
+<header class="af-panel-header af-assistant-header">
+  <strong>Assistant</strong>
+  <div class="af-assistant-actions">
+    <button class="af-icon" type="button" data-af-new-chat aria-label="New conversation" title="New conversation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="af-icon" type="button" data-af-options-toggle aria-label="Assistant options" aria-expanded="false" aria-controls="af-assistant-options" title="Assistant options"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
+    <button class="af-icon" type="button" data-af-toggle="right" aria-label="Close assistant" title="Close assistant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+  </div>
+</header>
+<section id="af-assistant-options" class="af-assistant-options" aria-label="Assistant options" hidden>
+  <label for="af-provider">Connection</label>
+  <select data-af-popover-select id="af-provider" aria-describedby="af-provider-status">
+    <option value="none">Choose a connection</option>
+    <option value="codex" disabled>Codex / ChatGPT · adapter required</option>
+    <option value="claude" disabled>Claude · adapter required</option>
+    <option value="ollama" disabled>Ollama · endpoint required</option>
+    <option value="api" disabled>Custom API · server required</option>
+  </select>
+  <p id="af-provider-status" class="af-hint">Disconnected. No messages are sent. Drafts stay in this tab.</p>
+  <button type="button" data-af-options-close>Done</button>
+</section>
+<div class="af-assistant-body af-scroll">
+  <div class="af-assistant-welcome" data-af-welcome>
+    <span class="af-assistant-welcome-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.5 2C8.7 2 4 5.6 4 10c0 1.3.4 2.5 1.1 3.6L4 17l4.3-1.5c1.7.8 3.8 1.2 6 1.2 5.3 0 9.7-3.3 9.7-7.4S19.8 2 14.5 2Z" transform="translate(-3 0) scale(.85)"/><path d="M20 12c1.3 1.1 2 2.5 2 4 0 1-.3 1.9-.8 2.8L22 22l-3.6-1.2c-1.1.4-2.2.7-3.4.7-2.7 0-5.1-1.2-6.3-3 5.7 1.1 11-1.7 11.3-6.5Z"/></svg></span>
+    <h2>What would you like to do?</h2>
+    <p>{intro}</p>
+    <div class="af-assistant-starters">{suggestions.map(suggestion => <button type="button" data-af-prompt={suggestion.prompt} disabled={suggestion.disabled}>{suggestion.label}</button>)}</div>
+  </div>
+  <div data-af-messages role="log" aria-label="Conversation" aria-live="polite"></div>
+</div>
+<div class="af-assistant-bottom">
+  <form class="af-composer" data-af-composer>
+    <label class="af-sr" for="af-prompt">Message the assistant</label>
+    <textarea id="af-prompt" placeholder={placeholder} rows="2" maxlength="12000" aria-describedby="af-chat-status"></textarea>
+    <div class="af-composer-actions">
+      <div class="af-shortcuts">
+        <span role="img" data-af-shortcut="send" aria-label="Ctrl + Enter to send"><kbd aria-hidden="true"><span data-af-send-modifier>Ctrl</span><span>↵</span></kbd><span aria-hidden="true">send</span></span>
+        <span role="img" data-af-shortcut="newline" aria-label="Shift + Enter for a new line"><kbd aria-hidden="true"><span data-af-shift-key>Shift</span><span>↵</span></kbd><span aria-hidden="true">new line</span></span>
+      </div>
+      <button class="af-primary" type="submit" disabled aria-label="Send message" title="Connect an assistant before sending"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg> Send</button>
+    </div>
+    <p id="af-chat-status" class="af-hint af-chat-status" role="status">Disconnected · No messages are sent.</p>
+  </form>
+  <footer class="af-assistant-footer"><span data-af-context>{context}</span><button type="button" data-af-options-toggle aria-controls="af-assistant-options" aria-expanded="false" aria-label="Choose assistant connection">Not connected</button></footer>
+</div>
+<script>import '../scripts/assistant';</script>

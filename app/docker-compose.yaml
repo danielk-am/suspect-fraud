@@ -1,0 +1,51 @@
+name: alkamy-osint
+services:
+  app:
+    build: .
+    ports:
+      - '127.0.0.1:${OSINT_PORT:-4321}:4321'
+    environment:
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:4321}
+      OSINT_OCR_URL: http://ocr:8080/ocr
+    secrets:
+      - osint_token
+    volumes:
+      - cases:/data
+    networks: [egress, evidence]
+    depends_on:
+      ocr:
+        condition: service_healthy
+    read_only: true
+    tmpfs: ['/tmp:rw,noexec,nosuid,size=64m']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: {max-size: 5m, max-file: '2'}
+  ocr:
+    build: workers/ocr
+    networks: [evidence]
+    read_only: true
+    tmpfs: ['/tmp:rw,noexec,nosuid,size=128m']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: {max-size: 5m, max-file: '2'}
+networks:
+  egress: {}
+  evidence:
+    internal: true
+volumes:
+  cases: {}
+secrets:
+  osint_token:
+    file: ${OSINT_TOKEN_FILE_HOST:-./.local/osint-token}

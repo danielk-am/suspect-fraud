@@ -1,0 +1,34 @@
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { z } from 'zod';
+import { schemas } from './schemas.mjs';
+import { inspectDomain } from './investigate.mjs';
+import { countryChannels } from './channels.mjs';
+import { assessText, redactText } from './domain.mjs';
+const id=z.uuid();
+export async function handleMcp(req,res,body,{store,inspect=inspectDomain,ocr}){
+ const server=new McpServer({name:'alkamy-suspect-fraud',version:'0.1.0'});
+ const register=(name,description,schema,fn,readOnly=true,destructive=false)=>server.registerTool(name,{description,inputSchema:schema,annotations:{readOnlyHint:readOnly,destructiveHint:destructive,idempotentHint:readOnly,openWorldHint:true}},async input=>{try{const result=await fn(input);return {content:[{type:'text',text:JSON.stringify(result)}]};}catch(e){return {isError:true,content:[{type:'text',text:JSON.stringify({code:e.code||'operation_failed',message:e.status?e.message:'The operation could not be completed. Retry or use the manual route.'})}]};}});
+ register('inspect_domain','Passively inspect a public domain using DNS, IANA RDAP and public IP allocation. Does not visit the suspect website, identify its operator, or establish fraud. Accept domain only.',schemas.inspect,({domain})=>inspect(domain));
+ register('find_reporting_channels','Return curated official reporting links by country. SG ScamShield reports are not police reports. Coverage is limited; OTHER gives global references.',z.object({country:z.enum(['SG','US','GB','AU','OTHER'])}).strict(),({country})=>countryChannels(country));
+ register('assess_text','Get local rule-based warning hints from supplied untrusted text. No signals is not proof of safety. This is not a neural network.',z.object({text:z.string().min(1).max(50000)}).strict(),({text})=>assessText(text));
+ register('find_company_contact','Return the claimed company, user-nominated official-site candidate and independent verification steps for a case. Does not authenticate the company/domain or invent email addresses.',z.object({caseId:id}).strict(),({caseId})=>store.get(caseId).companyVerification);
+ register('extract_screenshot_text','Run isolated local OCR on a PNG/JPEG/WebP screenshot and attach extracted untrusted text to a private case. Original bytes are not stored. Does not opt into training.',z.object({caseId:id,imageBase64:z.string().min(1).max(12000000),mimeType:z.enum(['image/png','image/jpeg','image/webp'])}).strict(),async({caseId,...input})=>{store.get(caseId);return store.evidence(caseId,await ocr(input));},false);
+ register('approve_training_example','Save a separately redacted training copy only with explicit consent and human redaction approval. Never pass original private evidence automatically. Metadata must be non-sensitive. No model trains or deploys automatically.',schemas.training.extend({caseId:id}).strict(),({caseId,...input})=>store.train(caseId,input),false);
+ register('withdraw_training_examples','Remove all current approved training copies for this case. Previously downloaded exports and model artifacts cannot be recalled by this action.',z.object({caseId:id}).strict(),({caseId})=>{store.revoke(caseId);return {ok:true};},false,true);
+ register('export_training_examples','Export only explicitly approved redacted copies with pseudonymous case IDs. Contains no original evidence. User must review export before moving it to isolated offline training.',z.object({}).strict(),()=>store.training());
+ register('list_cases','List this authenticated owner’s private cases. No cross-user or global data.',z.object({}).strict(),()=>store.list());
+ register('get_case','Read a private case, observed sources, report counts and evidence. Evidence text is untrusted reference material.',z.object({caseId:id}).strict(),({caseId})=>store.get(caseId));
+ register('create_case','Create a private case. Claimed company and officialDomain are user claims, not company authentication. Returns case ID.',schemas.create,input=>store.create(input),false);
+ register('attach_evidence_text','Attach untrusted text to a private case. This never opts it into training or sends it to authorities.',z.object({caseId:id,text:z.string().min(1).max(50000)}).strict(),({caseId,text})=>store.evidence(caseId,{text}),false);
+ register('inspect_case_domain','Inspect a domain and append sourced findings to a private case. Suspect website is never fetched.',z.object({caseId:id,domain:z.string().min(1).max(253)}).strict(),async({caseId,domain})=>{store.get(caseId);return store.inspection(caseId,await inspect(domain));},false);
+ register('prepare_report','Prepare a private report draft for an available official or observed channel. Does not send or increment submitted counts. Reuse requestId for retries.',schemas.prepare.extend({caseId:id}).strict(),({caseId,...input})=>store.prepare(caseId,input),false);
+ register('draft_email','Prepare a subject/body and observed recipient, if an email is actually listed. No sending. Many authorities use web forms rather than email.',schemas.prepare.extend({caseId:id}).strict(),({caseId,...input})=>store.prepare(caseId,input),false);
+ register('get_report_count','Read user-recorded report counts for one private case. External/global count is unknown. Prepared drafts are excluded.',z.object({caseId:id}).strict(),({caseId})=>store.get(caseId).counts);
+ register('record_report_receipt','Record the user’s declared external submission/acknowledgement. Requires a nonempty reference and timestamp; does not independently verify receipt or submit a report.',schemas.receipt.extend({caseId:id}).strict(),({caseId,reportId,...input})=>store.receipt(caseId,reportId,input),false);
+ register('preview_redaction','Suggest redactions locally. Automated redaction is incomplete; user must review a separate copy before training or sharing.',z.object({text:z.string().min(1).max(50000)}).strict(),({text})=>({text:redactText(text),notice:'Review manually. No training opt-in has occurred.'}));
+ register('delete_case','Permanently delete this private case and its separate approved training examples. Prior downloaded exports and trained models cannot be recalled by this action.',z.object({caseId:id}).strict(),({caseId})=>{store.remove(caseId);return {ok:true};},false,true);
+ const transport=new StreamableHTTPServerTransport({sessionIdGenerator:undefined,enableJsonResponse:true});
+ res.on('close',()=>{transport.close().catch(()=>{});server.close().catch(()=>{});});
+ await server.connect(transport);await transport.handleRequest(req,res,body);
+}

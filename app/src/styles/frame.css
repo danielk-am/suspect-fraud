@@ -1,0 +1,166 @@
+@import 'tailwindcss';
+@import './tokens.css';
+* {box-sizing:border-box}
+body {margin:0;font:13px/1.55 var(--af-font);color:var(--af-text);background:var(--af-base)}
+button,input,select,textarea {font:inherit;color:inherit}
+button,a,input,select,textarea {touch-action:manipulation}
+button {cursor:pointer;min-height:var(--af-control-height);border:1px solid var(--af-control-border);border-radius:8px;background:var(--af-surface);padding:var(--af-control-padding)}
+button:hover:not(:disabled) {background:var(--af-accent-soft)}
+button:disabled {cursor:not-allowed;opacity:.55}
+a {color:var(--af-accent);text-underline-offset:3px}
+input,select,textarea {display:block;width:100%;min-width:0;min-height:var(--af-control-height);padding:var(--af-control-padding);background:var(--af-field);border:1px solid var(--af-border);border-radius:8px}
+select {appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23797986' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+textarea {resize:vertical;max-height:30dvh}
+label {display:block;margin-block:0 6px;font-size:12px;font-weight:550}
+:focus-visible {outline:2px solid var(--af-focus);outline-offset:3px}
+[hidden] {display:none!important}
+.af-sr,.af-skip:not(:focus) {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.af-skip:focus {position:fixed;top:16px;left:16px;z-index:50;background:var(--af-surface);padding:12px}
+.af-frame {height:100dvh;min-height:0;display:grid;grid-template-columns:var(--af-left) 10px minmax(0,1fr) 10px var(--af-right);padding:16px;gap:0}
+.af-panel {display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid var(--af-border);border-radius:var(--af-radius);background:var(--af-surface)}
+.af-left {background:var(--af-base);border:0;border-radius:0}
+.af-left>.af-panel-header {border-bottom:0}
+.af-main {overflow:hidden}
+.af-right {position:relative;overflow:hidden}
+.af-workspace-footer {display:flex;justify-content:space-between;align-items:center;gap:12px;flex:0 0 auto;min-height:34px;padding:8px 14px;border-top:1px solid var(--af-border);background:var(--af-workspace);color:var(--af-muted);font-size:11px}
+.af-workspace-footer>* {min-width:0;overflow-wrap:anywhere}
+.af-panel-header,.af-toolbar {display:flex;align-items:center;gap:8px;flex:0 0 var(--af-header-height);height:var(--af-header-height);padding:8px 12px;border-bottom:1px solid var(--af-border)}
+.af-panel-header {justify-content:space-between}
+.af-brand {display:flex;align-items:center;gap:9px;font-weight:650;font-size:15px}
+.af-mark {display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--af-primary);color:white;font-size:15px}
+.af-toolbar-content {flex:1;min-width:0;overflow-wrap:anywhere;font-size:12px}
+.af-icon {display:grid;place-items:center;flex:0 0 34px;min-height:34px;width:34px;padding:7px;border:0;background:transparent;font-size:20px}
+.af-drawer-toggle {display:none}
+.af-icon svg,.af-primary svg {width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.af-scroll {flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;overflow-wrap:anywhere}
+.af-left>.af-scroll {padding:16px 12px}
+.af-panel-footer {display:grid;gap:8px;padding:12px;border-top:1px solid var(--af-border)}
+.af-panel-footer button {width:100%}
+.af-panel-footer a {display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border-radius:8px}
+.af-secondary {background:var(--af-surface);border:1px solid var(--af-border);color:var(--af-text);font-weight:500;text-decoration:none}
+.af-secondary:hover:not(:disabled) {background:var(--af-workspace);border-color:var(--af-control-border)}
+.af-primary {background:var(--af-primary);border-color:transparent;color:#fff;font-weight:600}
+.af-primary:hover:not(:disabled) {background:var(--af-primary-hover)}
+.af-canvas {padding:var(--af-content-space);background:var(--af-workspace);border-radius:0}
+.af-resizer {position:relative;cursor:col-resize;touch-action:none;outline:none;user-select:none}
+.af-resizer:focus {outline:none}
+.af-resizer::after {content:'';position:absolute;left:50%;top:50%;width:2px;height:28px;transform:translate(-50%,-50%);background:var(--af-control-border);border-radius:999px}
+.af-resizer:hover::after,.af-resizer[data-dragging]::after,.af-resizer:focus-visible::after {height:48px;background:var(--af-accent)}
+.af-resizer:focus-visible::after {box-shadow:0 0 0 2px var(--af-accent-soft)}
+.af-frame[data-hide-left] {grid-template-columns:minmax(0,1fr) 10px var(--af-right)}
+.af-frame[data-hide-right] {grid-template-columns:var(--af-left) 10px minmax(0,1fr)}
+.af-frame[data-hide-left][data-hide-right] {grid-template-columns:minmax(0,1fr)}
+.af-frame[data-hide-left] .af-left,.af-frame[data-hide-left] [data-af-resize='left'],.af-frame[data-hide-right] .af-right,.af-frame[data-hide-right] [data-af-resize='right'] {display:none}
+.af-chips {display:flex;gap:6px;overflow-x:auto;padding:3px;margin:0 -3px 16px;scrollbar-width:thin}
+.af-chips button {flex:0 0 auto;white-space:nowrap;min-height:32px;border-radius:999px;padding:5px 11px;border-color:transparent;background:transparent;font-size:12px}
+.af-chips button[aria-pressed='true'] {background:var(--af-accent-soft);color:var(--af-accent)}
+.af-search {position:relative;margin-bottom:24px}
+.af-search>svg {position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--af-muted);pointer-events:none}
+.af-search input {min-height:34px;padding:7px 10px 7px 34px;font-size:12px;border-color:var(--af-border);background:var(--af-surface);box-shadow:0 1px 2px #00000004}
+.af-nav-section {margin-block:24px}
+.af-nav-section h2 {font-size:10px;color:var(--af-muted);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin:0 0 10px;padding-inline:12px}
+.af-nav-section select + h2 {margin-top:20px}
+.af-nav-item {display:flex;align-items:center;gap:10px;width:100%;min-height:36px;text-align:left;text-decoration:none;color:var(--af-muted);background:transparent;border:0;font-size:12px;font-weight:500}
+.af-nav-item:hover {color:var(--af-text);background:color-mix(in srgb,var(--af-text) 5%,transparent)}
+.af-nav-item[aria-current='page'] {color:var(--af-accent);background:var(--af-accent-soft);font-weight:600}
+.af-nav-current {margin-left:auto;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0}
+.af-nav-item[aria-current='page'] .af-nav-current {opacity:1}
+.af-sidebar-settings {padding:20px 12px 0;border-top:1px solid var(--af-border)}
+.af-sidebar-settings select {font-size:12px;min-height:34px;padding-block:7px;border-color:var(--af-border);background-color:var(--af-surface)}
+.af-sidebar-settings h2 {padding-inline:0}
+.af-hint {font-size:11px;color:var(--af-muted);line-height:1.6}
+.af-eyebrow {font-size:10px;letter-spacing:.08em;font-weight:650;color:var(--af-muted)}
+/* Approved Marksculpt assistant: keep this structure consistent across apps. */
+.af-assistant-header>strong {font-size:14px;font-weight:650}
+.af-assistant-actions {display:flex;align-items:center;gap:2px}
+.af-assistant-actions .af-icon {width:30px;flex-basis:30px;min-height:32px;padding:7px}
+.af-assistant-actions svg {width:14px;height:14px}
+.af-assistant-actions [data-af-options-toggle] circle {fill:currentColor;stroke:none;r:1.8px}
+.af-assistant-body {padding:20px 16px;display:flex;flex-direction:column}
+.af-assistant-welcome {margin:auto 0;display:grid;justify-items:start;gap:8px;padding-block:16px}
+.af-assistant-welcome-icon {display:grid;place-items:center;width:36px;height:36px;margin-bottom:6px;border-radius:10px;color:var(--af-accent);background:var(--af-accent-soft)}
+.af-assistant-welcome-icon svg {width:18px;height:18px;fill:currentColor}
+.af-assistant-welcome h2 {font-size:15px;line-height:1.5;letter-spacing:-.2px;margin:0;font-weight:650}
+.af-assistant-welcome p {margin:0;color:var(--af-muted);font-size:13px;line-height:1.65}
+.af-assistant-starters {display:grid;gap:6px;width:100%;margin-top:10px}
+.af-assistant-starters button {width:100%;text-align:left;min-height:36px;padding:8px 12px;border:1px solid var(--af-border);border-radius:7px;font-size:13px;font-weight:450;background:var(--af-surface)}
+/* Reserve space inside the scrollport for the composer focus halo. */
+.af-assistant-bottom {flex:0 0 auto;max-height:60%;overflow:auto;padding-top:4px}
+.af-composer {border:1px solid var(--af-border);border-radius:22px;padding:12px 12px 10px;margin:0 16px;background:var(--af-surface);box-shadow:0 3px 12px #00000007}
+.af-composer textarea {border:0;border-radius:0;padding:0;min-height:56px;height:56px;max-height:25dvh;background:transparent;resize:none;font-size:14px;line-height:1.5;outline:none}
+.af-composer-actions {display:flex;align-items:center;gap:8px;margin-top:6px}
+.af-composer-actions .af-hint {flex:1 1 96px;font-size:10px;line-height:1.5}
+.af-shortcuts {display:grid;gap:4px;flex:1;min-width:0;color:var(--af-muted);font-size:10px;line-height:1.3}
+.af-shortcuts>span {display:flex;align-items:center;gap:5px}
+.af-shortcuts kbd {display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:34px;height:19px;padding:2px 4px;border:1px solid var(--af-border);border-radius:4px;background:var(--af-workspace);font:inherit}
+.af-composer-actions button {flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:6px;min-height:30px;padding:5px 10px;border-radius:999px;font-size:12px}
+.af-composer-actions svg {width:12px;height:12px}
+.af-chat-status {margin:6px 0 0;font-size:10px}
+.af-assistant-footer {display:flex;align-items:center;gap:8px;padding:8px 16px 12px;color:var(--af-muted);font-size:11px}
+.af-assistant-footer>span {flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.af-assistant-footer button {flex:0 0 auto;border:1px solid var(--af-border);border-radius:999px;min-height:25px;padding:3px 9px;background:var(--af-surface);font-size:11px;font-weight:450}
+.af-assistant-options {position:absolute;inset:calc(var(--af-header-height) + 4px) 12px auto;z-index:5;max-height:calc(100% - var(--af-header-height) - 20px);overflow:auto;padding:16px;background:var(--af-surface);border:1px solid var(--af-border);border-radius:10px;box-shadow:0 8px 28px #0002}
+.af-assistant-options select {font-size:12px}
+.af-assistant-options>[data-af-options-close] {width:100%;margin-top:8px}
+/* Explicit tall variant: document scroll, like Football Manager. */
+.af-frame[data-layout='tall'] {height:auto;min-height:100dvh;align-items:start}
+.af-frame[data-layout='tall'] .af-main {min-height:calc(100dvh - 32px);overflow:visible}
+.af-frame[data-layout='tall'] .af-canvas {overflow:visible;flex:1 0 auto}
+.af-frame[data-layout='tall'] .af-left,.af-frame[data-layout='tall'] .af-right {position:sticky;top:16px;height:calc(100dvh - 32px)}
+.af-frame[data-layout='tall'] .af-resizer {position:sticky;top:16px;height:calc(100dvh - 32px)}
+.af-section {width:100%;max-width:880px;margin-inline:auto;margin-bottom:var(--af-gap)}
+.af-card {border:1px solid var(--af-border);border-radius:12px;background:var(--af-surface);padding:clamp(16px,2vw,28px)}
+.af-section h1 {font-size:clamp(24px,2.8vw,36px);line-height:1.2;letter-spacing:-.035em;margin:10px 0 12px}
+.af-section h2 {font-size:16px;margin:0 0 12px}
+.af-section p {color:var(--af-muted);margin:0 0 16px}
+.af-form-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.af-form-grid .af-wide {grid-column:1/-1}
+.af-demo-status {min-height:22px;margin-top:12px}
+.af-backdrop {position:fixed;inset:0;z-index:20;background:#12131c66;border:0;border-radius:0;cursor:default}
+@media(max-width:1199px) {
+ .af-frame,.af-frame[data-hide-left],.af-frame[data-hide-right],.af-frame[data-hide-left][data-hide-right] {grid-template-columns:minmax(0,1fr)}
+ .af-frame[data-layout='tall'] .af-left,.af-frame[data-layout='tall'] .af-right {position:fixed;height:auto}
+ .af-resizer {display:none}
+ .af-drawer-toggle {display:grid}
+ .af-left,.af-right {display:none}
+ .af-frame[data-drawer='left'] .af-left,.af-frame[data-drawer='right'] .af-right {display:flex;position:fixed;z-index:30;top:16px;bottom:16px;width:min(360px,calc(100% - 32px));box-shadow:0 20px 70px #0003}
+ .af-left {left:16px;background:var(--af-base);border:1px solid var(--af-border);border-radius:var(--af-radius)}
+ .af-right {right:16px}
+ button,summary,.af-icon,.af-chips button,.af-nav-item,.af-composer-actions button,.af-assistant-starters button,.af-assistant-footer button {min-height:44px}
+ .af-assistant-actions .af-icon {width:44px;flex-basis:44px;min-height:44px}
+ .af-assistant-body {padding-block:12px}
+ .af-icon {flex-basis:44px;width:44px}
+ input,select,textarea {font-size:16px;min-height:44px}
+ .af-search input,.af-sidebar-settings select {min-height:44px;font-size:16px}
+ .af-panel-header,.af-toolbar {padding-inline:8px}
+}
+@media(max-width:560px) {.af-form-grid {grid-template-columns:minmax(0,1fr)} .af-toolbar-content {font-size:11px}}
+@media(prefers-reduced-motion:no-preference) {button {transition:background-color .15s ease, color .15s ease}}
+@media(prefers-reduced-motion:no-preference) {.af-resizer::after {transition:height .16s ease,background-color .16s ease}}
+
+@media(forced-colors:active) {select {appearance:auto;background-image:none}}
+[dir='rtl'] select {padding-right:12px;padding-left:36px;background-position:left 12px center}
+
+@media(max-height:500px) {.af-assistant-welcome {padding-block:0;gap:4px} .af-assistant-welcome-icon {display:none} .af-assistant-starters {margin-top:4px} .af-composer textarea {height:42px;min-height:42px}}
+
+/* Native select values with a compact, unclipped top-layer popover. */
+.af-select-trigger {display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-width:0;text-align:start;background:var(--af-field);border-color:var(--af-border);font-weight:400}
+.af-select-trigger>span:first-child {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.af-select-chevron {flex:none;width:7px;height:7px;margin-inline:3px;border-right:1.5px solid var(--af-muted);border-bottom:1.5px solid var(--af-muted);transform:translateY(-2px) rotate(45deg)}
+.af-select-popover {position:fixed;inset:auto;margin:0;padding:4px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--af-border);border-radius:10px;background:var(--af-surface);color:var(--af-text);box-shadow:0 8px 28px #0002;font:13px/1.45 var(--af-font)}
+.af-select-option {display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:34px;padding:7px 10px;border-radius:6px;cursor:pointer;overflow-wrap:anywhere}
+.af-select-option[data-active] {background:var(--af-accent-soft);color:var(--af-accent)}
+.af-select-option[aria-disabled='true'] {color:var(--af-muted);opacity:.55;cursor:not-allowed}
+.af-select-check {flex:none;visibility:hidden;color:var(--af-accent)}
+.af-select-option[aria-selected='true'] .af-select-check {visibility:visible}
+.af-sidebar-settings .af-select-trigger {font-size:12px;min-height:34px;padding-block:7px;border-color:var(--af-border);background:var(--af-surface)}
+.af-sidebar-settings .af-select-popover+h2 {margin-top:20px}
+.af-assistant-options .af-select-trigger {font-size:12px}
+@media(max-width:1199px) {.af-select-trigger,.af-sidebar-settings .af-select-trigger {min-height:44px;font-size:16px} .af-select-option {min-height:44px}}
+
+/* Editable fields share the assistant's surface, border and focus treatment. */
+.af-select-trigger:hover:not(:disabled) {background:var(--af-field)}
+input:focus,select:focus,textarea:focus,.af-select-trigger:focus,.af-select-trigger[aria-expanded='true'],.af-composer:focus-within {border-color:var(--af-focus);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--af-focus) 20%,transparent)}
+input:disabled,select:disabled,textarea:disabled,input[readonly],textarea[readonly],.af-select-trigger:disabled {background-color:var(--af-field-muted);color:var(--af-muted);opacity:1}
+input:disabled,select:disabled,textarea:disabled,.af-select-trigger:disabled {cursor:not-allowed}
+.af-composer textarea:focus {border:0;outline:none;box-shadow:none}

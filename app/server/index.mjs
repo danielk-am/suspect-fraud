@@ -1,0 +1,12 @@
+import { readFileSync, mkdirSync, chmodSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { CaseStore } from './store.mjs';
+import { createApp } from './app.mjs';
+const tokenPath=process.env.OSINT_TOKEN_FILE;if(!tokenPath)throw new Error('OSINT_TOKEN_FILE must point to the mounted owner access-token secret.');
+const token=readFileSync(tokenPath,'utf8').trim();
+const dbPath=resolve(process.env.OSINT_DB_PATH||'data/cases.sqlite');mkdirSync(dirname(dbPath),{recursive:true,mode:0o700});
+const store=new CaseStore(dbPath);chmodSync(dbPath,0o600);
+const port=Number(process.env.PORT||4321);const origin=process.env.PUBLIC_ORIGIN||`http://127.0.0.1:${port}`;
+const server=createApp({store,token,origin,dist:resolve(process.env.OSINT_DIST||'dist')});
+server.listen(port,process.env.BIND_HOST||'127.0.0.1',()=>console.log('Alkamy SuspectFraud is ready. Evidence and credentials are not logged.'));
+for(const sig of ['SIGINT','SIGTERM'])process.on(sig,()=>{server.close(()=>{store.close();process.exit(0);});setTimeout(()=>process.exit(1),10000).unref();});
