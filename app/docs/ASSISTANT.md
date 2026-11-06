@@ -1,23 +1,25 @@
-# Assistant integration contract
+# OpenRouter BYOK assistant
 
-The starter includes UI only. Its submit control stays disabled. Drafts stay in the current DOM and are not sent or persisted. The approved panel structure stays consistent across apps; customize task copy and capabilities through its props. UI changes do not connect a provider by themselves.
+SuspectFraud supports OpenRouter with the fixed `openrouter/free` router. Unlock the workspace, open Assistant options, enter your own OpenRouter API key and consent to sending this conversation to OpenRouter and a free-model provider. A ChatGPT login does not provide API access. Other provider choices remain unavailable.
 
-| Choice | Required adapter | Included test state |
-| --- | --- | --- |
-| ChatGPT / Codex | A currently supported server integration, or a verified local CLI bridge for a desktop/local deployment | Unimplemented |
-| Claude | A currently supported server integration, or a verified local CLI bridge | Unimplemented |
-| Ollama | An authorized reachable endpoint and model; a remote deployment needs its own protected route | Unimplemented |
-| Custom API | An authenticated server route with a validated request/response contract | Unimplemented |
+Only messages explicitly sent in this chat and its recent replies are included. Case files, screenshot transcripts and investigation results are never attached automatically. Paste only the information you intend to share. Replies have no tools or live case access and cannot submit reports or change records. Output is rendered as plain untrusted text.
 
-Verify each provider's official current integration/authentication documentation before implementation; consumer sign-in does not establish arbitrary app OAuth. A deployed web app cannot automatically use the user's locally signed-in CLI.
+## Credentials and privacy
 
-Keep provider keys, endpoint credentials and tool secrets server-side. Public frontend settings can hold provider labels or public configuration only. Bind authorization to the actual user/project, validate structured output before effects, and treat references and model text as untrusted data. Do not pass model output to HTML or a shell.
+The browser sends the key over this installation's HTTPS connection to the server for validation against `https://openrouter.ai/api/v1/key`. The server holds it in memory for the authenticated browser session. It is never written to the database, browser storage or application logs. The input clears on submission. Disconnect, lock, session expiry or a server restart clears the key; expiry cleanup runs every 30 seconds. Reloading the page clears visible conversation history but keeps the connection while its server session is valid.
 
-A real adapter needs explicit disconnected, connecting, ready, working/streaming, cancelled and failed states. Show progress in the conversation, a bounded timeout, cancellation, visible error and safe retry. Preserve drafts on failure, allow history clearing, and show the selected context and local/cloud destination before sending. Proposed writes need application-authorized review/apply with receipts and Undo or a recovery path. Ordinary work remains usable without AI. Test rejected/stale proposals and denied access alongside success.
+Chat requests go only to OpenRouter's fixed HTTPS API. Requests use `model: openrouter/free`, `provider.data_collection: deny`, and zero maximum prompt/completion prices. No paid fallback or automatic retry is configured. Free models have variable availability and limits. These restrictions may leave no eligible model. This is not a promise of zero retention: review [OpenRouter privacy settings](https://openrouter.ai/settings/privacy) and each provider's policies before sending private information. Use a dedicated revocable key from [OpenRouter](https://openrouter.ai/settings/keys).
 
-## UI extension points
+## Operation and limits
 
-- Keep `AssistantPanel.astro`'s header, welcome, full-width suggestions, composer and context/provider footer. Connection details live behind the three-dot and provider buttons. Default provider label is “Not connected”; replace it with the actual selected provider only after connection succeeds.
-- `assistant.ts` supplies draft filling, new conversation, options Escape/outside dismissal and disconnected feedback. A connected app must replace the disconnected Enter/submit handlers with its validated adapter. Command+Return on Mac and Ctrl+Enter elsewhere send; plain Enter is also supported. Shift+Enter adds a newline, and IME composition must not submit. Keep the platform-aware keycaps and accessible labels in sync with the adapter. Send is enabled only for a non-empty allowed request with a ready adapter; show Stop during work.
-- Intercept the cancelable `af:new-conversation` event to stop active requests and reconcile pending writes before allowing reset. Never erase unresolved effects by only clearing the DOM. Preserve unsent drafts across closing, resizing and drawer changes.
-- Use real context and app-specific suggestions. Claim direct edits or Undo only when implemented. Long prompts and public progress summaries may collapse behind “More”; do not display private model reasoning. Streaming/loading feedback, errors and recovery remain visible in the conversation.
+The app retains recent chat in DOM memory only. Requests allow up to five preceding turns plus a new message, at most 24,000 characters overall. The composer allows 4,000 characters per user message. Responses are capped at 1,200 output tokens and 8,000 characters. Each provider request has a 30-second deadline, no retry, one in-flight request per session and 12 attempts per minute. Provider work also shares the installation's two-request work limit. A partial upload reserves its session before body parsing; disconnect cancels it before a key can be stored.
+
+Send requires a connected provider and nonempty message. Stop cancels pending work, although a request may already have reached the provider. Drafts survive failure/cancellation. New conversation aborts pending chat and clears history; lock also clears the draft. Closing a drawer does not clear chat. The options form scrolls within the panel on short/mobile viewports.
+
+## Evidence
+
+Synthetic browser checks cover connection, safe literal output, rate limits, cancellation, disconnection, reload, new conversation and lock. Automated regressions cover session isolation, consent, Origin denial, bearer-only denial, no automatic case context, free-only request structure, invalid/provider/oversized responses, network/deadline failures, upload/disconnect races, concurrency and stale authorization responses. A bounded independent review cleared the two reproduced timing defects.
+
+Actual OpenRouter generation and eligible free-provider availability remain unverified because no real user key was supplied. No paid calls or shared credentials were used.
+
+Official references: [Free router](https://openrouter.ai/docs/guides/routing/routers/free-router), [provider routing](https://openrouter.ai/docs/guides/routing/provider-selection), [retention distinctions](https://openrouter.ai/docs/guides/features/zdr).

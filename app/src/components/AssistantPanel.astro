@@ -28,13 +28,25 @@ const {
 <section id="af-assistant-options" class="af-assistant-options" aria-label="Assistant options" hidden>
   <label for="af-provider">Connection</label>
   <select data-af-popover-select id="af-provider" aria-describedby="af-provider-status">
-    <option value="none">Choose a connection</option>
+    <option value="openrouter">OpenRouter · your key · free models</option>
     <option value="codex" disabled>Codex / ChatGPT · adapter required</option>
     <option value="claude" disabled>Claude · adapter required</option>
     <option value="ollama" disabled>Ollama · endpoint required</option>
     <option value="api" disabled>Custom API · server required</option>
   </select>
-  <p id="af-provider-status" class="af-hint">Disconnected. No messages are sent. Drafts stay in this tab.</p>
+  <p id="af-provider-status" class="af-hint">Unlock the workspace, then connect your own OpenRouter API key.</p>
+  <form id="af-connect" class="af-key-form">
+    <label for="af-api-key">OpenRouter API key</label>
+    <input id="af-api-key" type="password" autocomplete="off" data-1p-ignore data-lpignore="true" spellcheck="false" autocapitalize="none" required maxlength="220" placeholder="sk-or-v1-…" aria-describedby="af-key-privacy" />
+    <p id="af-key-privacy" class="af-hint">The key stays in server memory for this browser session. Locking, disconnecting, expiry or restart clears it. It is never saved to your cases or browser storage.</p>
+    <label class="af-key-consent"><input id="af-cloud-consent" type="checkbox" required/> I agree to send my chat through OpenRouter to a free-model provider. Case files are not included automatically.</label>
+    <p class="af-hint">Free models have limits and variable availability. No paid fallback. Providers that permit data collection are excluded; retention policies still apply.</p>
+    <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noreferrer noopener">Create a dedicated key at OpenRouter ↗</a>
+    <a href="https://openrouter.ai/settings/privacy" target="_blank" rel="noreferrer noopener">Review OpenRouter privacy settings ↗</a>
+    <button class="af-primary" type="submit" id="af-connect-button" disabled>Connect free models</button>
+  </form>
+  <button type="button" id="af-disconnect" hidden>Disconnect & forget key</button>
+  <button type="button" data-sf-section="unlock" id="af-unlock-link">Open workspace access</button>
   <button type="button" data-af-options-close>Done</button>
 </section>
 <div class="af-assistant-body af-scroll">
@@ -57,8 +69,8 @@ const {
       </div>
       <button class="af-primary" type="submit" disabled aria-label="Send message" title="Connect an assistant before sending"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg> Send</button>
     </div>
-    <p id="af-chat-status" class="af-hint af-chat-status" role="status">Disconnected · No messages are sent.</p>
+    <p id="af-chat-status" class="af-hint af-chat-status" role="status">Use Assistant options to connect your key.</p>
   </form>
-  <footer class="af-assistant-footer"><span data-af-context>{context}</span><button type="button" data-af-options-toggle aria-controls="af-assistant-options" aria-expanded="false" aria-label="Choose assistant connection">Not connected</button></footer>
+  <footer class="af-assistant-footer"><span data-af-context>{context}</span><button type="button" data-af-options-toggle data-af-provider-label aria-controls="af-assistant-options" aria-expanded="false" aria-label="Choose assistant connection">Connect OpenRouter</button></footer>
 </div>
 <script>import '../scripts/assistant';</script>

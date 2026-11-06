@@ -25,6 +25,8 @@ if (frame) {
     main.inert = !!drawer;
   }
   function closeDrawer(restore = true) {drawer = null; sync(); if (restore) returnFocus?.focus(); returnFocus = null}
+  // Product actions can hand focus back to a task after resolving prerequisites.
+  frame.addEventListener('af:focus-task', () => { if (drawer) closeDrawer(false); });
   frame.querySelectorAll<HTMLButtonElement>('[data-af-toggle]').forEach(button => button.addEventListener('click', () => {
     const side = button.dataset.afToggle as 'left' | 'right';
     if (narrow.matches) {

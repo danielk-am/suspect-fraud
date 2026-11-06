@@ -11,8 +11,9 @@ A private workspace for checking an unexpected offer, keeping evidence and prepa
 - Report/email drafts and manually recorded external receipts. Counts cover this private case, exclude drafts and leave global totals unknown.
 - Case export/deletion and separately approved redacted training copies, with export and withdrawal.
 - 19 bearer-authenticated MCP tools at `/mcp`.
+- Optional OpenRouter BYOK chat using free models, with explicit consent and no automatic case attachment.
 
-The interface serves `/tools/suspect-fraud/` and `/tools/suspect-fraud/recruitment-scams/`. Hosted owner pilot: [osint.alkamy.ltd](https://osint.alkamy.ltd/tools/suspect-fraud/), verified on 6 November 2026. Private API/MCP calls require the owner credential. This is not a public ChatGPT directory listing or a multiuser service. The shared AI Assistant is disconnected; the manual workflow works independently.
+The interface serves `/tools/suspect-fraud/` and `/tools/suspect-fraud/recruitment-scams/`. Hosted owner pilot: [osint.alkamy.ltd](https://osint.alkamy.ltd/tools/suspect-fraud/), verified on 6 November 2026. Private API/MCP calls require the owner credential. This is not a public ChatGPT directory listing or a multiuser service. Connect your own OpenRouter key in Assistant options for free-model chat; the manual workflow also works independently. See [assistant privacy and limits](docs/ASSISTANT.md).
 
 ## Run locally
 
@@ -38,7 +39,7 @@ Python tests require a private virtual environment with the versions in [LEARNIN
 
 ## Privacy and limits
 
-Case text, OCR transcripts, drafts and receipts remain in this installation's SQLite volume. Original screenshot bytes are processed transiently and **not retained**: keep your originals and compare saved SHA-256 hashes. No analytics or cloud OCR is configured. Supplied messages and lookup responses are untrusted data, including apparent instructions inside them.
+Case text, OCR transcripts, drafts and receipts remain in this installation's SQLite volume. Original screenshot bytes are processed transiently and **not retained**: keep your originals and compare saved SHA-256 hashes. No analytics or cloud OCR is configured. If you connect OpenRouter, messages you explicitly send in the assistant and its recent replies go to OpenRouter and a free-model provider; case files remain separate. The API key stays in server memory for the browser session and clears on disconnect, lock, expiry or restart. Supplied messages and lookup responses are untrusted data, including apparent instructions inside them.
 
 Retention is manual. Deletion removes current case/training records, but cannot recall downloads or backups. Use encrypted private storage/backups; SQLite is not application-encrypted. Training needs a separate redacted copy, consent and human review. Automated redaction is incomplete. Withdrawal stops future exports; previously exported datasets/models require separate deletion/retraining.
 

@@ -23,7 +23,7 @@ Start from project root with `node server/index.mjs` after mounting the secret, 
 - `POST /api/login` body `{token}` with exact `Origin` signs into an eight-hour in-memory session. Cookie: HttpOnly, SameSite=Strict, Secure under HTTPS. Restart invalidates sessions. Token never returns in responses.
 - `GET /api/session` returns `{authenticated:true, expiresAt, mode:'single-owner-private'}` or 401.
 - `POST /api/logout` clears the session.
-- All other `/api/*` routes require the session cookie or `Authorization: Bearer <mounted token>`. MCP accepts bearer authentication only.
+- Assistant routes require a live browser session cookie; bearer-only assistant access is denied. All other `/api/*` routes require the session cookie or `Authorization: Bearer <mounted token>`. MCP accepts bearer authentication only.
 - Cookie mutations require an exact Origin. Any supplied cross-origin Origin is rejected, including bearer calls. No CORS access is granted.
 - Login attempts are limited to 10 per 15 minutes per direct peer; API/MCP requests to 180/minute per peer. At most two asynchronous investigation/OCR/MCP requests run concurrently. A reverse proxy should add its own public rate limiting; internal peer limiting intentionally fails closed for shared peers.
 - Errors are JSON `{error:{code,message,requestId}}`; unexpected exceptions return a generic message. JSON input rejects unknown fields and wrong types. Body limit is 12 MB; endpoint schemas impose lower text limits.
@@ -35,6 +35,10 @@ All paths below are relative to `/api`. Responses are JSON unless noted. Use JSO
 
 | Method/path | Input | Result |
 |---|---|---|
+| GET `/assistant` | Browser session | `{connected,model}`; never the key |
+| POST `/assistant` | `{key,consent:true}` | Validates against OpenRouter and holds the key in session memory; strict schema, 48 KB body limit |
+| DELETE `/assistant` | — | Aborts pending work and removes the key; `{connected:false}` |
+| POST `/assistant/chat` | `{messages:[{role,content}]}` | `{text,model}`; alternating user/assistant, starting and ending user; max11 messages, 8k each and 24k total characters. Fixed free router, no tools/case context/paid fallback. |
 | GET `/cases` | — | Up to 100 recent case summaries |
 | POST `/cases` | `{title,country?,claimedCompany?,officialDomain?}` | 201 full case. country SG/US/GB/AU/OTHER, default SG; officialDomain is a domain only and remains an unverified user nomination. |
 | GET `/cases/:id` | — | Full private case |
@@ -94,3 +98,5 @@ Static bearer authentication is suitable for this owner-controlled pilot. Public
 Central REST/MCP bounds: 500 cases; 100 approved training copies per case and 5,000 per installation. Deletion/withdrawal restores capacity.
 
 Retention is manual deletion in this pilot. Take encrypted private backups or use full-volume encryption; SQLite is not application-encrypted. The owner token grants all workspace cases. No multiuser release, neural-network accuracy claim, public complaint database, automatic reporting or silent cloud OCR is implied.
+
+Assistant credential lifetime, upstream destinations and limits: [ASSISTANT.md](ASSISTANT.md). These routes do not add MCP tools.

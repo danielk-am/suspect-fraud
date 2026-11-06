@@ -27,3 +27,11 @@ Screenshot saving was denied by browser tooling; inline inspection is recorded, 
 ## Release boundary
 
 Independent review reproduced a REST/MCP capacity mismatch and independently confirmed the central transactional correction. REVIEW.md records hashes and scope. Hosted DNS/TLS, private runtime and public-origin synthetic acceptance are now recorded in [HOSTED-PILOT.md](HOSTED-PILOT.md). Multiuser/OAuth, public directory acceptance and validated scam-detection accuracy remain unestablished.
+
+## OpenRouter BYOK and navigation repair — 6 November 2026
+
+Private task navigation now resolves access and case prerequisites, preserving the requested destination and moving focus to the relevant field. OpenRouter BYOK adds explicit-consent free-model chat with a session-memory key and no automatic case attachment.
+
+The production build passed. Automated coverage includes server/session/provider denial and failure controls, upload cancellation/concurrency, expiry and a stale-401 UI regression. Synthetic browser checks exercised connection, plain-text script-like output, free-model rate limiting, Stop/draft preservation, disconnect, reload, new conversation and lock. Viewports 320, 390, 820 and 1440 pixels had no document overflow; connection options scroll within short screens. These are emulated viewport checks, not physical-device acceptance.
+
+An independent bounded review reproduced and cleared partial-upload/disconnect and stale-auth-response races. No real OpenRouter key was supplied: actual model generation and eligible provider availability remain unverified. No paid calls were made. See [assistant contract](ASSISTANT.md).
