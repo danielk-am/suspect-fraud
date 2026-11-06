@@ -5,3 +5,9 @@ A skills-only plugin by Daniel Kam. It uses the tools available in the host; it 
 Install the ZIP through a compatible plugin host, or use the bundled SKILL.md in a skill-capable assistant. For a case, supply evidence, jurisdiction and authorised reporting destinations. Future reports require the user’s authority.
 
 No incident evidence or secrets are bundled. No automatic monitoring or unattended submissions are configured. Public directory approval and runtime reporting are separate from package installation.
+
+## Quick checks
+
+Ask “Does this message look like a scam?” with the message, link or screenshot. The skill gives a qualified assessment before deeper research. It works on content supplied in Dot or another compatible conversation host; it installs no background listener or notification system.
+
+Website: https://danielk.am/tools/suspect-fraud/

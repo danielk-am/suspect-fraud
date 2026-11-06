@@ -1,6 +1,6 @@
 ---
 name: reporting-suspected-fraud
-description: Captures suspected scam and impersonation evidence, verifies reporting destinations, and prepares or submits authorised reports to domain registrars, hosting providers, the impersonated company, and Singapore ScamShield. Use for recruitment scams, suspicious websites, fraud evidence packs, abuse complaints, or SuspectFraud. Does not establish guilt, identify people from faces, or replace bank or police reporting.
+description: Captures suspected scam and impersonation evidence, verifies reporting destinations, and prepares or submits authorised reports to domain registrars, hosting providers, the impersonated company, and Singapore ScamShield. Use for “is this a scam?”, suspicious messages or links in Dot or a conversation, recruitment scams, fraud evidence packs, abuse complaints, or SuspectFraud. Screens supplied content for warning signs before deeper research; does not monitor messages in the background. Does not establish guilt, identify people from faces, or replace bank or police reporting.
 metadata:
   aliases: [suspectfraud]
 ---
@@ -14,6 +14,16 @@ Maintainer role: governance and incident reporting.
 ## Inputs
 
 Use supplied messages, screenshots, URLs, dates, jurisdiction, prior reports, and the user's requested reporting scope. Infer settled authority from the conversation. Ask only for facts that change the report or action; continue independent evidence preparation.
+
+## Quick check before research
+
+Run immediately on supplied messages, screenshots or links when asked to assess them, or when this skill is already active and a new message adds a concrete risk signal. Read [the warning rules](reference/how-immediate-warnings-work.md). Give a short, proportionate warning before browsing or asking intake questions when an actionable risk is visible. Do not delay an urgent warning to complete domain research. A generic link, unfamiliar sender or badge alone does not warrant a fraud allegation.
+
+Return: **Assessment** (high concern / caution / insufficient evidence / no specific warning signs observed); **Why** (one to three observed signals); **Next step** (one concrete action). Say what remains unverified. If the input asks only for a quick check, stop there unless a necessary verification can safely resolve the question. Research and reports follow the steps below when requested.
+
+## Host availability
+
+In Dot or another conversation host, inspect only content actually supplied or exposed through a user-authorised connector. Use plain conversational text for warnings; use a host-supported warning indicator only when that capability is verified. Do not invent coloured dots, overlays, notifications or background protection. Skill instructions do not install a message listener, intercept links, or guarantee invocation. If automatic checking is requested, explain the need for a separately authorised integration and define its source, consent, data handling and alert channel before implementation. Do not enable account-wide monitoring from a quick-check request.
 
 ## Steps
 

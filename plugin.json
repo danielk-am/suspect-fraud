@@ -1,22 +1,32 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "suspect-fraud",
-  "version": "0.1.0",
-  "description": "Capture suspected fraud evidence and report through verified official channels.",
   "author": {
+    "email": "hey@danielk.am",
     "name": "Daniel Kam"
   },
+  "description": "Check scam warning signs, preserve evidence and report through verified official channels.",
   "extensions": {
     "com.openai": {
       "interface": {
-        "displayName": "SuspectFraud",
-        "shortDescription": "Capture and report scam clues",
-        "longDescription": "Preserves private evidence, verifies registrar and provider abuse contacts, prepares or submits authorised reports, contacts impersonated companies, and routes Singapore cases to ScamShield. Uses available host tools; submissions require user authority and access.",
-        "developerName": "Daniel Kam",
-        "category": "Security",
         "capabilities": [],
-        "defaultPrompt": "Capture this suspected scam evidence and help report it through verified official channels."
+        "category": "Security",
+        "defaultPrompt": [
+          "Check this message for scam warning signs before I act.",
+          "Preserve this evidence and help report the suspected scam."
+        ],
+        "developerName": "Daniel Kam",
+        "displayName": "SuspectFraud",
+        "longDescription": "Checks supplied messages, screenshots and links for concrete scam warning signs before deeper research. Preserves private evidence and helps submit authorised reports through verified registrar, provider, company and Singapore ScamShield channels. Uses available host tools. Does not install background monitoring.",
+        "shortDescription": "Capture and report scam clues",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png",
+        "websiteURL": "https://danielk.am/tools/suspect-fraud/",
+        "supportURL": "https://danielk.am/tools/suspect-fraud/support/",
+        "privacyPolicyURL": "https://danielk.am/tools/suspect-fraud/privacy/",
+        "termsOfServiceURL": "https://danielk.am/tools/suspect-fraud/terms/"
       }
     }
-  }
+  },
+  "name": "suspect-fraud",
+  "version": "0.2.0"
 }

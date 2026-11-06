@@ -1,0 +1,29 @@
+{
+  "interface": {
+    "capabilities": [],
+    "category": "Security",
+    "defaultPrompt": [
+      "Check this message for scam warning signs before I act.",
+      "Preserve this evidence and help report the suspected scam."
+    ],
+    "developerName": "Daniel Kam",
+    "displayName": "SuspectFraud",
+    "longDescription": "Checks supplied messages, screenshots and links for concrete scam warning signs before deeper research. Preserves private evidence and helps submit authorised reports through verified registrar, provider, company and Singapore ScamShield channels. Uses available host tools. Does not install background monitoring.",
+    "shortDescription": "Capture and report scam clues",
+    "logo": "./assets/icon.png",
+    "composerIcon": "./assets/icon.png",
+    "websiteURL": "https://danielk.am/tools/suspect-fraud/",
+    "supportURL": "https://danielk.am/tools/suspect-fraud/support/",
+    "privacyPolicyURL": "https://danielk.am/tools/suspect-fraud/privacy/",
+    "termsOfServiceURL": "https://danielk.am/tools/suspect-fraud/terms/"
+  },
+  "name": "suspect-fraud",
+  "version": "0.2.0",
+  "description": "Check scam warning signs, preserve evidence and report through verified official channels.",
+  "author": {
+    "name": "Daniel Kam",
+    "email": "hey@danielk.am"
+  },
+  "keywords": [],
+  "skills": "./skills"
+}
