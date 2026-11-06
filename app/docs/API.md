@@ -42,7 +42,7 @@ All paths below are relative to `/api`. Responses are JSON unless noted. Use JSO
 | POST `/cases/:id/inspect` | `{domain}` | Appends passive lookup result, returns full case |
 | POST `/cases/:id/evidence` | `{text}` or `{imageBase64,mimeType}` | Appends text or OCR transcript, returns full case. text max50k, PNG/JPEG/WebP only; worker enforces bytes/pixels. |
 | POST `/cases/:id/reports` | `{channelId,requestId:UUID}` | 201 report draft. Reuse the same requestId on uncertain retry. Conflicting reuse returns409. |
-| POST `/cases/:id/receipts` | `{reportId,status,reference,submittedAt}` | Full case. status submitted/acknowledged; nonempty external reference and past ISO timestamp required. User declaration, not independently verified. |
+| POST `/cases/:id/receipts` | `{reportId,status,reference,submittedAt}` | Full case. status submitted/acknowledged; nonempty external reference and past UTC ISO timestamp ending in `Z` required (for example `2026-11-06T09:00:00.000Z`). User declaration, not independently verified. |
 | POST `/cases/:id/training` | `{text,consent:true,redactionApproved:true,label,campaignId,source}` | Separate approved record; label suspected_scam/benign, text max20k, source max200, campaignId an alphanumeric/underscore/hyphen slug. Automatic checks are incomplete; human review required. |
 | DELETE `/cases/:id/training` | — | Withdraws all current copies for the case; `{ok:true}` |
 | GET `/training/export` | — | NDJSON download of only approved copies. Case UUIDs and campaign identifiers become stable hashed pseudonyms; grouping is preserved. No original evidence or screenshots. |
